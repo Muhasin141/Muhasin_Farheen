@@ -29,14 +29,15 @@ button{cursor:pointer}.cover{min-height:100svh;background:radial-gradient(ellips
 .key-control svg{width:100%;height:100%;overflow:visible;pointer-events:none}
 .key-control.dragging{z-index:5;transition:none}
 .unlock-hint{position:absolute;left:0;right:0;bottom:4px;margin:0;color:#ead9c2;font:10px Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;line-height:1.7}
-.unlock-fallback{position:absolute;left:50%;bottom:-27px;transform:translateX(-50%);padding:7px 12px;border:0;background:transparent;color:var(--gold);font:10px Arial,sans-serif;text-decoration:underline;text-underline-offset:4px;letter-spacing:.08em}
 .unlock-stage.opening .key-control{opacity:0;transition:opacity .35s ease}
 .unlock-stage.opening .unlock-hint{color:var(--gold)}
 @media(max-width:520px){.unlock-stage{height:285px}.key-control{right:2%;bottom:42px;width:132px}.lock-wrap{top:0}}
 
 #main{display:none}#main.show{display:block}.section{padding:76px 20px;text-align:center;position:relative}.section.dark{background:var(--wine);color:var(--cream)}.section h2{font-size:clamp(30px,6vw,46px);font-weight:400;margin:12px 0 20px}.eyebrow{color:#a77c43}.dark .eyebrow{color:var(--gold)}.ornament{color:#b48b51;font-size:25px;margin:16px}.copy{max-width:690px;margin:0 auto;line-height:1.9;font-size:17px}.muted{color:var(--muted)}.dark .muted{color:#e3cdb1}
 .reveal{opacity:0;transform:translateY(25px);transition:opacity .8s ease,transform .8s ease}.reveal.in{opacity:1;transform:none}
-.scratch-wrap{max-width:440px;margin:30px auto 0;position:relative;border:1px solid #c7a86c;padding:10px;background:#fffaf1}.scratch-wrap canvas{position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);display:block;background:#b9a58a;touch-action:none;cursor:crosshair;z-index:2}.date-under{min-height:130px;display:grid;place-content:center;gap:8px;color:var(--wine)}.date-under strong{font-size:29px;font-weight:400}.date-under span{font:11px Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.scratch-wrap{max-width:440px;margin:30px auto 0;position:relative;border:1px solid #c7a86c;padding:10px;background:#fffaf1}.scratch-wrap canvas{position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);display:block;background:#b9a58a;touch-action:none;cursor:crosshair;z-index:2}.date-under{min-height:130px;display:grid;place-content:center;gap:8px;color:var(--wine);visibility:hidden}.scratch-wrap.revealed .date-under{visibility:visible}
+body.date-hidden .date-details-content,body.date-hidden .footer-date{visibility:hidden}
+body.date-revealed .date-details-content,body.date-revealed .footer-date{visibility:visible}.date-under strong{font-size:29px;font-weight:400}.date-under span{font:11px Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase}
 .countdown-reveal{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .8s ease,transform .8s ease,visibility .8s}.countdown-reveal.visible{opacity:1;visibility:visible;transform:none}.countdown{display:flex;justify-content:center;gap:clamp(12px,4vw,34px);flex-wrap:wrap;margin:32px auto}.unit{min-width:62px}.unit strong{display:block;color:var(--gold);font-size:clamp(31px,7vw,48px);font-weight:400;font-variant-numeric:tabular-nums}.unit span{font:10px Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}
 .detail-grid{max-width:850px;margin:32px auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}.detail{border:1px solid #c6a76c;padding:28px 18px;background:#fffaf3}.detail h3{font-weight:400;font-size:25px;margin:12px 0}.detail p{line-height:1.7;margin:8px 0}
 .family{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:760px;margin:30px auto}.family-card{padding:28px 15px;border-top:1px solid #c6a76c;border-bottom:1px solid #c6a76c}.family-card h3{font-size:24px;font-weight:400;margin:12px}
@@ -62,7 +63,7 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none}*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
+<body class="date-hidden">
 <section class="cover" id="cover">
  <div class="cover-frame">
 
@@ -72,9 +73,9 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
   <div class="kicker">A celebration of love & faith</div>
   <div class="arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
   <p class="sub">Together with their families<br>request the pleasure of your company</p>
-  <h1>MUHASIN M.<span>&</span>FARHEEN H.</h1>
+  <h1>MUHASIN M<span>&</span>FARHEEN H</h1>
   <div class="goldline">✦ ❧ ✦</div>
-  <p class="sub">Are getting married<br>10 January 2027 · Palakkad</p>
+  <p class="sub">Are getting married</p>
   <div class="unlock-stage" id="unlockStage" aria-label="Interactive lock and key invitation opening">
    <div class="lock-wrap" id="lockTarget">
     <svg class="lock-svg" viewBox="0 0 180 205" role="img" aria-label="Ornate gold wedding lock">
@@ -95,7 +96,7 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
     </svg>
     <div class="lock-caption">A little lock of love</div>
    </div>
-   <button class="key-control" id="keyControl" type="button" aria-label="Drag the golden key to the lock, or tap to unlock">
+   <button class="key-control" id="keyControl" type="button" aria-label="Drag the golden key onto the lock to open the invitation">
     <svg viewBox="0 0 150 64" role="img" aria-label="Golden key">
      <defs><linearGradient id="keyGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0c2"/><stop offset=".5" stop-color="#d9bd83"/><stop offset="1" stop-color="#a8793e"/></linearGradient></defs>
      <circle cx="119" cy="32" r="20" fill="none" stroke="url(#keyGold)" stroke-width="9"/>
@@ -105,7 +106,6 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
     </svg>
    </button>
    <p class="unlock-hint" id="unlockHint">Drag the golden key into the lock to open our invitation</p>
-   <button class="unlock-fallback" id="unlockFallback" type="button">Or tap here to unlock</button>
   </div>
  </div>
 </section>
@@ -125,9 +125,9 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
  <section class="section reveal">
   <div class="eyebrow">The gathering</div><h2>Details of the Blessed Day</h2>
   <div class="detail-grid">
-   <article class="detail"><div class="ornament">✧</div><div class="eyebrow">Date & time</div><h3>Sunday, 10 January 2027</h3><p>11:30 AM to 3:00 PM</p></article>
+   <article class="detail"><div class="ornament">✧</div><div class="eyebrow">Date & time</div><div class="date-details-content"><h3>Sunday, 10 January 2027</h3><p>11:30 AM to 3:00 PM</p></div></article>
    <article class="detail"><div class="ornament">⌖</div><div class="eyebrow">Venue location</div><h3>Kottayil Convention Center</h3><p>Edthara, Palakkad, Kerala, India</p><a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Kottayal+Convention+Center%2C+Edthara%2C+Palakkad%2C+Kerala%2C+India" target="_blank" rel="noopener">Get directions ↗</a></article>
-   <article class="detail"><div class="ornament">✧</div><div class="eyebrow">Save the date</div><h3>Add to Calendar</h3><p>Keep our special day in your calendar so you don't miss the celebration.</p><a class="maplink" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Muhasin%20%26%20Farheen%20Wedding&dates=20270110T060000Z%2F20270110T093000Z&details=Wedding%20celebration%20of%20Muhasin%20M.%20%26%20Farheen%20H.%20%7C%2011%3A30%20AM%20%E2%80%93%203%3A00%20PM%20IST&location=Kottayil%20Convention%20Center%2C%20Edthara%2C%20Palakkad%2C%20Kerala%2C%20India" target="_blank" rel="noopener">Save to Calendar ↗</a></article>
+   <article class="detail"><div class="ornament">✧</div><div class="eyebrow">Save the date</div><h3>Add to Calendar</h3><p>Keep our special day in your calendar so you don't miss the celebration.</p><a class="maplink" href="#" id="downloadCalendar">Add to Phone Calendar (Android / iPhone) ↓</a><br><a class="maplink" style="margin-top:8px" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Muhasin%20%26%20Farheen%20Wedding&dates=20270110T060000Z%2F20270110T093000Z&details=Wedding%20celebration%20of%20Muhasin%20M%20%26%20Farheen%20H%20%7C%2011%3A30%20AM%20%E2%80%93%203%3A00%20PM%20IST&location=Kottayil%20Convention%20Center%2C%20Edthara%2C%20Palakkad%2C%20Kerala%2C%20India" target="_blank" rel="noopener">Add to Google Calendar ↗</a><p class="form-note" style="margin-top:12px">On iPhone, open the downloaded calendar file and choose Add. On Android, open it with your preferred calendar app.</p></article>
   </div>
  </section>
  <section class="section dark reveal">
@@ -144,7 +144,7 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
  <section class="section reveal">
   <div class="eyebrow">With the blessings of</div><h2>Our Families</h2><div class="ornament">❖</div>
   <p class="copy">We are grateful for the love, prayers and support of our families. We look forward to celebrating this special day with you.</p>
-  <div class="family"><div class="family-card"><div class="eyebrow">The Groom</div><h3>MUHASIN M</h3></div><div class="family-card"><div class="eyebrow">The Bride</div><h3>FARHEEN H.</h3></div></div>
+  <div class="family"><div class="family-card"><div class="eyebrow">The Groom</div><h3>MUHASIN M</h3></div><div class="family-card"><div class="eyebrow">The Bride</div><h3>FARHEEN H</h3></div></div>
  </section>
  <section class="section dark reveal">
   <div class="eyebrow">Heartfelt messages</div><h2>Share Your Duas & Blessings</h2>
@@ -159,10 +159,10 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
  <section class="section reveal">
   <div class="arabic" style="color:#9b7441">بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ</div>
   <p class="copy">May Allah bless you both, bestow His blessings upon you, and unite you in goodness.</p>
-  <div class="ornament">❖ · ❖</div><p class="eyebrow">With love & best wishes</p><h2 style="color:var(--wine)">MUHASIN M. & FARHEEN H.</h2>
+  <div class="ornament">❖ · ❖</div><p class="eyebrow">With love & best wishes</p><h2 style="color:var(--wine)">MUHASIN M & FARHEEN H</h2>
  </section>
 </main>
-<footer><div class="eyebrow" style="color:var(--gold)">You are warmly invited</div><div class="footer-names">Muhasin M & Farheen H</div><div class="smallcaps">10 January 2027 · Palakkad</div><p class="smallcaps" style="margin-top:22px">Made with love & duas</p></footer>
+<footer><div class="eyebrow" style="color:var(--gold)">You are warmly invited</div><div class="footer-names">Muhasin M & Farheen H</div><div class="smallcaps footer-date">10 January 2027 · Palakkad</div><p class="smallcaps" style="margin-top:22px">Made with love & duas</p></footer>
 <button class="music" id="musicBtn" aria-label="Play wedding music" title="Play wedding music">♫</button>
 <audio id="weddingAudio" loop preload="auto" src="wedding-song.wav"></audio>
 <script>
@@ -173,7 +173,6 @@ const unlockStage=document.getElementById("unlockStage");
 const lockTarget=document.getElementById("lockTarget");
 const keyControl=document.getElementById("keyControl");
 const unlockHint=document.getElementById("unlockHint");
-const unlockFallback=document.getElementById("unlockFallback");
 let keyDragging=false,keyStartX=0,keyStartY=0,keyOffsetX=0,keyOffsetY=0,invitationOpened=false;
 
 async function openInvitation(){
@@ -221,7 +220,6 @@ keyControl.addEventListener("pointerup",e=>{
  else resetKey();
 });
 keyControl.addEventListener("pointercancel",resetKey);
-unlockFallback.addEventListener("click",openInvitation);
 const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");observer.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 function countdown(){let t=Math.max(0,WEDDING_DATE-new Date());document.getElementById("days").textContent=String(Math.floor(t/86400000)).padStart(3,"0");document.getElementById("hours").textContent=String(Math.floor(t/3600000)%24).padStart(2,"0");document.getElementById("mins").textContent=String(Math.floor(t/60000)%60).padStart(2,"0");document.getElementById("secs").textContent=String(Math.floor(t/1000)%60).padStart(2,"0")}
@@ -241,7 +239,7 @@ function setupScratch(){
  ctx.fillText("✦  SCRATCH HERE  ✦",r.width/2,r.height/2);
  ctx.globalCompositeOperation="destination-out";
 }
-function scratchAt(e){const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.fill();if(!cleared){const d=ctx.getImageData(0,0,canvas.width,canvas.height).data;let n=0;for(let i=3;i<d.length;i+=32)if(d[i]===0)n++;if(n>d.length/32*.42){canvas.style.opacity="0";canvas.style.transition="opacity .5s";cleared=true;const reveal=document.getElementById("countdownReveal");reveal.classList.add("visible");reveal.setAttribute("aria-hidden","false");launchFireworks();setTimeout(()=>canvas.style.display="none",550)}}}
+function scratchAt(e){const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.fill();if(!cleared){const d=ctx.getImageData(0,0,canvas.width,canvas.height).data;let n=0;for(let i=3;i<d.length;i+=32)if(d[i]===0)n++;if(n>d.length/32*.42){canvas.style.opacity="0";canvas.style.transition="opacity .5s";cleared=true;canvas.parentElement.classList.add("revealed");document.body.classList.remove("date-hidden");document.body.classList.add("date-revealed");const reveal=document.getElementById("countdownReveal");reveal.classList.add("visible");reveal.setAttribute("aria-hidden","false");launchFireworks();setTimeout(()=>canvas.style.display="none",550)}}}
 function launchFireworks(){
  const fx=document.createElement("canvas");fx.setAttribute("aria-hidden","true");Object.assign(fx.style,{position:"fixed",inset:"0",width:"100%",height:"100%",pointerEvents:"none",zIndex:"9999"});document.body.appendChild(fx);
  const fctx=fx.getContext("2d"),dpr=Math.min(devicePixelRatio||1,2);fx.width=innerWidth*dpr;fx.height=innerHeight*dpr;fctx.scale(dpr,dpr);
@@ -251,11 +249,43 @@ function launchFireworks(){
  let frame=0;function animate(){fctx.clearRect(0,0,innerWidth,innerHeight);for(let i=bursts.length-1;i>=0;i--){const p=bursts[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.025;p.life--;fctx.globalAlpha=Math.max(0,p.life/p.max);fctx.fillStyle=p.color;fctx.beginPath();fctx.arc(p.x,p.y,p.r,0,Math.PI*2);fctx.fill();if(p.life<=0)bursts.splice(i,1)}fctx.globalAlpha=1;if(++frame<115)requestAnimationFrame(animate);else fx.remove()}requestAnimationFrame(animate);
 }
 canvas.addEventListener("pointerdown",e=>{scratching=true;canvas.setPointerCapture(e.pointerId);scratchAt(e)});canvas.addEventListener("pointermove",e=>{if(scratching)scratchAt(e)});canvas.addEventListener("pointerup",()=>scratching=false);canvas.addEventListener("pointercancel",()=>scratching=false);window.addEventListener("resize",()=>{if(!cleared && main.classList.contains("show"))setupScratch()});
+// Cross-platform calendar file: iPhone/iOS Calendar and Android calendar apps can import .ics files.
+document.getElementById("downloadCalendar").addEventListener("click", (event) => {
+ event.preventDefault();
+ const ics = [
+  "BEGIN:VCALENDAR",
+  "VERSION:2.0",
+  "PRODID:-//Muhasin and Farheen//Wedding Invitation//EN",
+  "CALSCALE:GREGORIAN",
+  "METHOD:PUBLISH",
+  "BEGIN:VEVENT",
+  "UID:muhasin-farheen-wedding-20270110@wedding-invitation",
+  "DTSTAMP:20261118T000000Z",
+  "DTSTART;TZID=Asia/Kolkata:20270110T113000",
+  "DTEND;TZID=Asia/Kolkata:20270110T150000",
+  "SUMMARY:Muhasin M & Farheen H Wedding",
+  "DESCRIPTION:Wedding celebration of Muhasin M & Farheen H. We look forward to celebrating with you!",
+  "LOCATION:Kottayil Convention Center, Edthara, Palakkad, Kerala, India",
+  "STATUS:CONFIRMED",
+  "END:VEVENT",
+  "END:VCALENDAR"
+ ].join("\r\n");
+ const file = new Blob([ics], {type:"text/calendar;charset=utf-8"});
+ const url = URL.createObjectURL(file);
+ const link = document.createElement("a");
+ link.href = url;
+ link.download = "Muhasin-Farheen-Wedding.ics";
+ document.body.appendChild(link);
+ link.click();
+ link.remove();
+ setTimeout(() => URL.revokeObjectURL(url), 1500);
+});
+
 // Original romantic instrumental included as wedding-song.wav.
 const audio=document.getElementById("weddingAudio"),musicBtn=document.getElementById("musicBtn");
 musicBtn.addEventListener("click",async()=>{try{if(audio.paused){await audio.play();musicBtn.classList.add("playing");musicBtn.textContent="Ⅱ";musicBtn.title="Pause wedding music"}else{audio.pause();musicBtn.classList.remove("playing");musicBtn.textContent="♫";musicBtn.title="Play wedding music"}}catch(e){alert("The music file wedding-song.wav must be uploaded beside index.html in the repository.")}});
 function sendWhatsApp(text){const url="https://wa.me/"+RSVP_PHONE+"?text="+encodeURIComponent(text);window.open(url,"_blank","noopener")}
-document.getElementById("rsvpForm").addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("guest").value,guests=document.getElementById("guests").value,reply=document.getElementById("reply").value,msg=document.getElementById("rsvpmessage").value;sendWhatsApp("Wedding RSVP — Muhasin M. & Farheen H.\nName: "+name+"\nGuests: "+guests+"\nResponse: "+reply+"\nMessage: "+msg);document.getElementById("rsvpStatus").textContent="WhatsApp is opening with your response."});
+document.getElementById("rsvpForm").addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("guest").value,guests=document.getElementById("guests").value,reply=document.getElementById("reply").value,msg=document.getElementById("rsvpmessage").value;sendWhatsApp("Wedding RSVP — Muhasin M & Farheen H\nName: "+name+"\nGuests: "+guests+"\nResponse: "+reply+"\nMessage: "+msg);document.getElementById("rsvpStatus").textContent="WhatsApp is opening with your response."});
 // Wishes and likes are powered by Firebase Firestore in the module script below.
 </script>
 
