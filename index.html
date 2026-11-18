@@ -57,6 +57,7 @@ form{max-width:520px;margin:28px auto 0;text-align:left}label{display:block;font
 .like-btn:disabled{opacity:.6;cursor:wait}
 .empty-comments{border:1px dashed #d9bd8380;padding:24px;text-align:center;color:#e3cdb1;font:13px Arial,sans-serif;line-height:1.7}
 .music{position:fixed;right:16px;bottom:16px;z-index:5;width:48px;height:48px;border-radius:50%;border:1px solid var(--gold);background:var(--wine);color:var(--gold);font-size:18px;box-shadow:0 5px 20px #0003}.music.playing{animation:spin 5s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+#snowCanvas{display:none;position:fixed;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}#main.show #snowCanvas{display:block}
 footer{background:#210710;color:#e5d1b2;padding:38px 20px;text-align:center}.footer-names{font-size:30px;color:var(--gold);margin:12px}
 a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1px solid var(--gold);padding:8px 0;text-decoration:none;font:10px Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}.dark .maplink{color:var(--gold)}
 @media(max-width:520px){.section{padding:60px 17px}.formrow{grid-template-columns:1fr}.cover-frame{padding:35px 18px}}
@@ -110,6 +111,7 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
  </div>
 </section>
 <main id="main">
+ <canvas id="snowCanvas" aria-hidden="true"></canvas>
  <section class="section reveal">
   <div class="eyebrow">A note of joy</div><div class="ornament">❧</div><h2>With Hearts Full of Gratitude</h2>
   <p class="copy">With the blessings of Allah and the love of our families, we warmly invite you to share in the joy of our wedding. Your presence, duas and blessings will make our celebration even more special as we begin this beautiful journey together.</p>
@@ -184,6 +186,7 @@ async function openInvitation(){
  keyControl.disabled=true;
  setTimeout(async()=>{
   main.classList.add("show");
+  startSnowfall();
   document.getElementById("cover").style.display="none";
   requestAnimationFrame(()=>requestAnimationFrame(setupScratch));
   try{await audio.play();musicBtn.classList.add("playing");musicBtn.textContent="Ⅱ";musicBtn.title="Pause wedding music"}
@@ -191,6 +194,36 @@ async function openInvitation(){
   window.scrollTo({top:0,behavior:"smooth"});
  },1050);
 }
+
+// Gentle snowfall is enabled only after the invitation page opens.
+const snowCanvas=document.getElementById("snowCanvas");
+const snowCtx=snowCanvas.getContext("2d");
+let snowflakes=[],snowFrame=0,snowRunning=false,snowWidth=0,snowHeight=0;
+function resizeSnow(){
+ const dpr=Math.min(window.devicePixelRatio||1,2);
+ snowWidth=window.innerWidth;snowHeight=window.innerHeight;
+ snowCanvas.width=Math.round(snowWidth*dpr);snowCanvas.height=Math.round(snowHeight*dpr);
+ snowCtx.setTransform(dpr,0,0,dpr,0,0);
+ const count=Math.min(90,Math.max(32,Math.round(snowWidth/15)));
+ snowflakes=Array.from({length:count},()=>({x:Math.random()*snowWidth,y:Math.random()*snowHeight,r:1+Math.random()*2.3,v:0.55+Math.random()*1.15,drift:(Math.random()-.5)*0.55,alpha:.35+Math.random()*.5,phase:Math.random()*Math.PI*2}));
+}
+function drawSnow(){
+ if(!snowRunning)return;
+ snowCtx.clearRect(0,0,snowWidth,snowHeight);
+ for(const f of snowflakes){
+  f.phase+=.012;f.x+=f.drift+Math.sin(f.phase)*.22;f.y+=f.v;
+  if(f.y>snowHeight+5){f.y=-6;f.x=Math.random()*snowWidth;}
+  if(f.x>snowWidth+5)f.x=-5;if(f.x< -5)f.x=snowWidth+5;
+  snowCtx.beginPath();snowCtx.arc(f.x,f.y,f.r,0,Math.PI*2);
+  snowCtx.fillStyle=`rgba(255,250,242,${f.alpha})`;snowCtx.shadowColor="rgba(255,255,255,.35)";snowCtx.shadowBlur=4;snowCtx.fill();
+ }
+ snowCtx.shadowBlur=0;snowFrame=requestAnimationFrame(drawSnow);
+}
+function startSnowfall(){
+ if(snowRunning || window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ snowRunning=true;resizeSnow();drawSnow();
+}
+window.addEventListener("resize",()=>{if(snowRunning)resizeSnow()});
 
 function resetKey(){
  keyControl.style.transform="";
