@@ -164,7 +164,7 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
 </main>
 <footer><div class="eyebrow" style="color:var(--gold)">You are warmly invited</div><div class="footer-names">Muhasin M & Farheen H</div><div class="smallcaps footer-date">10 January 2027 · Palakkad</div><p class="smallcaps" style="margin-top:22px">Made with love & duas</p></footer>
 <button class="music" id="musicBtn" aria-label="Play wedding music" title="Play wedding music">♫</button>
-<audio id="weddingAudio" loop preload="auto" src="wedding-song.wav"></audio>
+<audio id="weddingAudio" loop preload="auto" src="wedding-background.mp3"></audio>
 <script>
 const RSVP_PHONE="917510902395"; // WhatsApp number with India country code
 const WEDDING_DATE=new Date("2027-01-10T11:30:00+05:30");
@@ -281,9 +281,9 @@ document.getElementById("downloadCalendar").addEventListener("click", (event) =>
  setTimeout(() => URL.revokeObjectURL(url), 1500);
 });
 
-// Original romantic instrumental included as wedding-song.wav.
+// Uploaded instrumental included as wedding-background.mp3.
 const audio=document.getElementById("weddingAudio"),musicBtn=document.getElementById("musicBtn");
-musicBtn.addEventListener("click",async()=>{try{if(audio.paused){await audio.play();musicBtn.classList.add("playing");musicBtn.textContent="Ⅱ";musicBtn.title="Pause wedding music"}else{audio.pause();musicBtn.classList.remove("playing");musicBtn.textContent="♫";musicBtn.title="Play wedding music"}}catch(e){alert("The music file wedding-song.wav must be uploaded beside index.html in the repository.")}});
+musicBtn.addEventListener("click",async()=>{try{if(audio.paused){await audio.play();musicBtn.classList.add("playing");musicBtn.textContent="Ⅱ";musicBtn.title="Pause wedding music"}else{audio.pause();musicBtn.classList.remove("playing");musicBtn.textContent="♫";musicBtn.title="Play wedding music"}}catch(e){alert("The music file wedding-background.mp3 must be uploaded beside index.html in the repository.")}});
 function sendWhatsApp(text){const url="https://wa.me/"+RSVP_PHONE+"?text="+encodeURIComponent(text);window.open(url,"_blank","noopener")}
 document.getElementById("rsvpForm").addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("guest").value,guests=document.getElementById("guests").value,reply=document.getElementById("reply").value,msg=document.getElementById("rsvpmessage").value;sendWhatsApp("Wedding RSVP — Muhasin M & Farheen H\nName: "+name+"\nGuests: "+guests+"\nResponse: "+reply+"\nMessage: "+msg);document.getElementById("rsvpStatus").textContent="WhatsApp is opening with your response."});
 // Wishes and likes are powered by Firebase Firestore in the module script below.
