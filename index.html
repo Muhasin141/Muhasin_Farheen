@@ -45,13 +45,16 @@ form{max-width:520px;margin:28px auto 0;text-align:left}label{display:block;font
 
 .comments-heading{max-width:650px;margin:42px auto 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;border-bottom:1px solid #d9bd8360;padding-bottom:12px}
 .comment-count{font:11px Arial,sans-serif;color:#e3cdb1}
-.comments-list{max-width:650px;margin:0 auto;text-align:left;display:grid;gap:13px}
-.comment-card{background:transparent;color:var(--cream);border:1px solid #d9bd8370;padding:18px 20px;box-shadow:none}
+.comments-list{max-width:650px;margin:0 auto;text-align:left;display:grid;grid-auto-rows:180px;gap:13px;max-height:566px;overflow-y:auto;overflow-x:hidden;padding:2px 9px 2px 2px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--gold) #4b1025}
+.comments-list::-webkit-scrollbar{width:7px}
+.comments-list::-webkit-scrollbar-track{background:#4b1025}
+.comments-list::-webkit-scrollbar-thumb{background:var(--gold);border-radius:8px}
+.comment-card{height:180px;min-height:180px;display:flex;flex-direction:column;overflow:hidden;background:transparent;color:var(--cream);border:1px solid #d9bd8370;padding:15px 18px;box-shadow:none}
 .comment-top{display:flex;align-items:center;gap:11px}
 .comment-avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#d9bd83;color:var(--wine);font:bold 14px Arial,sans-serif;flex:none}
 .comment-author{font:bold 13px Arial,sans-serif;color:var(--cream)}
 .comment-date{font:10px Arial,sans-serif;color:#d9bd83;margin-top:3px}
-.comment-message{font-size:15px;line-height:1.7;margin:14px 0 12px;overflow-wrap:anywhere}
+.comment-message{font-size:15px;line-height:1.55;margin:10px 0 10px;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;flex:1}
 .like-btn{border:1px solid #d9bd83;background:transparent;color:var(--gold);padding:7px 12px;border-radius:20px;font:12px Arial,sans-serif;display:inline-flex;align-items:center;gap:6px}
 .like-btn.liked{background:#6b2039;border-color:#d9bd83;color:#fff0d0}
 .like-btn:disabled{opacity:.6;cursor:wait}
