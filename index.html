@@ -60,7 +60,8 @@ form{max-width:520px;margin:28px auto 0;text-align:left}label{display:block;font
 .like-btn:disabled{opacity:.6;cursor:wait}
 .empty-comments{border:1px dashed #d9bd8380;padding:24px;text-align:center;color:#e3cdb1;font:13px Arial,sans-serif;line-height:1.7}
 .music{position:fixed;right:16px;bottom:16px;z-index:5;width:48px;height:48px;border-radius:50%;border:1px solid var(--gold);background:var(--wine);color:var(--gold);font-size:18px;box-shadow:0 5px 20px #0003}.music.playing{animation:spin 5s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-#snowCanvas{display:none;position:fixed;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}#main.show #snowCanvas{display:block}
+#snowCanvas{display:none;position:fixed;left:0;top:0;width:100vw;height:100vh;height:100dvh;z-index:20;pointer-events:none;opacity:1}
+body.invitation-open #snowCanvas{display:block}
 footer{background:#210710;color:#e5d1b2;padding:38px 20px;text-align:center}.footer-names{font-size:30px;color:var(--gold);margin:12px}
 a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1px solid var(--gold);padding:8px 0;text-decoration:none;font:10px Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}.dark .maplink{color:var(--gold)}
 @media(max-width:520px){.section{padding:60px 17px}.formrow{grid-template-columns:1fr}.cover-frame{padding:35px 18px}}
@@ -114,7 +115,6 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
  </div>
 </section>
 <main id="main">
- <canvas id="snowCanvas" aria-hidden="true"></canvas>
  <section class="section reveal">
   <div class="eyebrow">A note of joy</div><div class="ornament">❧</div><h2>With Hearts Full of Gratitude</h2>
   <p class="copy">With the blessings of Allah and the love of our families, we warmly invite you to share in the joy of our wedding. Your presence, duas and blessings will make our celebration even more special as we begin this beautiful journey together.</p>
@@ -167,6 +167,7 @@ a{color:inherit}.maplink{display:inline-block;color:var(--wine);border-bottom:1p
   <div class="ornament">❖ · ❖</div><p class="eyebrow">With love & best wishes</p><h2 style="color:var(--wine)">MUHASIN M & FARHEEN H</h2>
  </section>
 </main>
+<canvas id="snowCanvas" aria-hidden="true"></canvas>
 <footer><div class="eyebrow" style="color:var(--gold)">You are warmly invited</div><div class="footer-names">Muhasin M & Farheen H</div><div class="smallcaps footer-date">10 January 2027 · Palakkad</div><p class="smallcaps" style="margin-top:22px">Made with love & duas</p></footer>
 <button class="music" id="musicBtn" aria-label="Play wedding music" title="Play wedding music">♫</button>
 <audio id="weddingAudio" loop preload="auto" src="wedding-background.mp3"></audio>
@@ -197,6 +198,7 @@ async function openInvitation(){
  } catch(e) { musicBtn.title="Tap to play wedding music"; }
  setTimeout(()=>{
   main.classList.add("show");
+  document.body.classList.add("invitation-open");
   startSnowfall();
   document.getElementById("cover").style.display="none";
   requestAnimationFrame(()=>requestAnimationFrame(setupScratch));
@@ -224,7 +226,7 @@ function drawSnow(){
   if(f.y>snowHeight+5){f.y=-6;f.x=Math.random()*snowWidth;}
   if(f.x>snowWidth+5)f.x=-5;if(f.x< -5)f.x=snowWidth+5;
   snowCtx.beginPath();snowCtx.arc(f.x,f.y,f.r,0,Math.PI*2);
-  snowCtx.fillStyle=`rgba(255,250,242,${f.alpha})`;snowCtx.shadowColor="rgba(255,255,255,.35)";snowCtx.shadowBlur=4;snowCtx.fill();
+  snowCtx.fillStyle=`rgba(255,255,255,${f.alpha})`;snowCtx.shadowColor="rgba(255,255,255,.8)";snowCtx.shadowBlur=6;snowCtx.fill();
  }
  snowCtx.shadowBlur=0;snowFrame=requestAnimationFrame(drawSnow);
 }
@@ -233,6 +235,8 @@ function startSnowfall(){
  snowRunning=true;resizeSnow();drawSnow();
 }
 window.addEventListener("resize",()=>{if(snowRunning)resizeSnow()});
+window.addEventListener("orientationchange",()=>{if(snowRunning)setTimeout(resizeSnow,250)});
+if(window.visualViewport) window.visualViewport.addEventListener("resize",()=>{if(snowRunning)resizeSnow()});
 
 function resetKey(){
  keyControl.style.transform="";
@@ -291,9 +295,27 @@ function launchFireworks(){
  let frame=0;function animate(){fctx.clearRect(0,0,innerWidth,innerHeight);for(let i=bursts.length-1;i>=0;i--){const p=bursts[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.025;p.life--;fctx.globalAlpha=Math.max(0,p.life/p.max);fctx.fillStyle=p.color;fctx.beginPath();fctx.arc(p.x,p.y,p.r,0,Math.PI*2);fctx.fill();if(p.life<=0)bursts.splice(i,1)}fctx.globalAlpha=1;if(++frame<115)requestAnimationFrame(animate);else fx.remove()}requestAnimationFrame(animate);
 }
 canvas.addEventListener("pointerdown",e=>{scratching=true;canvas.setPointerCapture(e.pointerId);scratchAt(e)});canvas.addEventListener("pointermove",e=>{if(scratching)scratchAt(e)});canvas.addEventListener("pointerup",()=>scratching=false);canvas.addEventListener("pointercancel",()=>scratching=false);window.addEventListener("resize",()=>{if(!cleared && main.classList.contains("show"))setupScratch()});
-// Cross-platform calendar file: iPhone/iOS Calendar and Android calendar apps can import .ics files.
+// One-button calendar flow:
+// Android opens a pre-filled Google Calendar event (the guest taps Save there).
+// iPhone/iPad downloads an .ics file that opens in Apple Calendar for confirmation.
 document.getElementById("downloadCalendar").addEventListener("click", (event) => {
  event.preventDefault();
+
+ const isAndroid = /Android/i.test(navigator.userAgent);
+ if (isAndroid) {
+  const params = new URLSearchParams({
+   action: "TEMPLATE",
+   text: "Muhasin M & Farheen H Wedding",
+   dates: "20270110T063000Z/20270110T093000Z",
+   ctz: "Asia/Kolkata",
+   details: "Wedding celebration of Muhasin M & Farheen H. We look forward to celebrating with you!",
+   location: "Kottayil Convention Center, Edthara, Palakkad, Kerala, India"
+  });
+  // Android may open the Google Calendar app if installed; otherwise it opens Calendar on the web.
+  window.location.href = "https://calendar.google.com/calendar/render?" + params.toString();
+  return;
+ }
+
  const ics = [
   "BEGIN:VCALENDAR",
   "VERSION:2.0",
@@ -320,7 +342,7 @@ document.getElementById("downloadCalendar").addEventListener("click", (event) =>
  document.body.appendChild(link);
  link.click();
  link.remove();
- setTimeout(() => URL.revokeObjectURL(url), 1500);
+ setTimeout(() => URL.revokeObjectURL(url), 3000);
 });
 
 // Uploaded instrumental included as wedding-background.mp3.
